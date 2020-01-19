@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Electives</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.elective_id.label }}<br>
+            {{ form.elective_id(size=32) }}<br>
+            {% for error in form.elective_id.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.elective_name.label }}<br>
+            {{ form.elective_name(size=32) }}<br>
+            {% for error in form.elective_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+            {{ form.elective_description.label }}<br>
+            {{ form.elective_description(cols = '50', rows = '10') }}<br>
+            {% for error in form.elective_description.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

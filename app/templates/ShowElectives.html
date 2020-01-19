@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<table class="table table-hover" style="table-layout: fixed">
+    <tr>
+        <th> Elective ID </th>
+        <th> Elective Name </th>
+        <th> Elective Description </th>
+        <th>  </th>
+    </tr>
+{% for elective in electives %}
+    {% include '_ShowElectives.html' %}
+{% endfor %}
+</table>
+{% endblock %}

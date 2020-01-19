@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for elective in electives %}
+    {% include '_ShowElectives.html' %}
+{% endfor %}
+
+{% endblock %}

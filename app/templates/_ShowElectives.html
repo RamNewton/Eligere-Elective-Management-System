@@ -1,0 +1,6 @@
+<tr>
+    <td> {{elective.electiveID}} </td>
+    <td> {{elective.electiveName}} </td>
+    <td style="word-wrap: break-word"> {{elective.electiveDescription}} </td>
+    <td> <a href = "{{url_for('removeElective', elective_id = elective.electiveID)}}" > Remove </a></td>
+</tr>
