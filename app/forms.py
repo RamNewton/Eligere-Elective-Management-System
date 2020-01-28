@@ -21,9 +21,9 @@ class AddElectives(FlaskForm):
         if tmp is not None:
             raise ValidationError('Please enter a different elective id.')
 
-
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
+    name = StringField('Name', validators = [DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(

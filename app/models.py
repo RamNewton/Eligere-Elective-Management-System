@@ -8,6 +8,14 @@ from app import login
 def load_user(id):
     return User.query.get(int(id))
 
+class Faculty(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, index = True)
+    name = db.Column(db.String(40), index=True)
+    elective_id = db.Column(db.String(10), index = True)
+    def __repr__(self):
+        return '<Fac {}, User_id : {}, Elective_id : {}>'.format(self.id, self.user_id, self.elective_id)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)

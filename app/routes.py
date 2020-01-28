@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, session
 from app import app
 from app.forms import LoginForm, AddElectives, RegistrationForm
 from app import db
-from app.models import InitialElectiveList, User
+from app.models import InitialElectiveList, User, Faculty
 from flask_login import login_user, logout_user, current_user, login_required
 from functools import wraps
 
@@ -80,12 +80,11 @@ def addElectives():
 def showElectives():
     electives = InitialElectiveList.query.all()
     # print("These are the electives: \n", electives)
-    return render_template('ShowElectives.html', title='ShowElectives', electives = electives )
-
+    return render_template('ShowElectives.html', title='Show Electives', electives = electives )
 
 @app.route('/RemoveElective/<elective_id>')
-@requires_role('Chaiperson')
-def removeElective(elective_id):
+@requires_role('Chairperson')
+def funcRemoveElective(elective_id):
     tmp = InitialElectiveList.query.filter_by(electiveID=elective_id).first()
     if tmp is None:
         flash("Invalid Elective ID, cannot be removed")
@@ -95,6 +94,34 @@ def removeElective(elective_id):
         db.session.delete(obj)
         db.session.commit()
         return(redirect(url_for('showElectives')))
+
+@app.route('/ChooseElectiveToOffer')
+@requires_role('Faculty')
+def chooseElectiveToOffer():
+    electives = InitialElectiveList.query.all()
+    tmp = Faculty.query.filter_by(user_id = current_user.id).first()
+    chosen_elective_id = tmp.elective_id
+    return render_template('ChooseElectiveToOffer.html', title='Choose Elective to Offer', electives = electives, choice = chosen_elective_id)
+
+@app.route('/funcChooseElectiveToOffer/<elective_id>')
+@requires_role('Faculty')
+def funcChooseElectiveToOffer(elective_id):
+    tmp = InitialElectiveList.query.filter_by(electiveID=elective_id).first()
+    if (tmp is None) and elective_id != 'None':
+        flash("Invalid Elective ID, cannot be removed")
+        return(redirect(url_for('index')))
+    else:
+        tmp = Faculty.query.filter_by(user_id=int(current_user.id)).first()
+        tmp.elective_id = str(elective_id)
+        db.session.commit()
+        print("User has chosen ", elective_id)
+        return(redirect(url_for('chooseElectiveToOffer')))
+
+@app.route('/ViewFacultyChoice')
+@requires_role('Faculty')
+def viewFacultyChoice():
+    fac_list = Faculty.query.all()
+    return render_template('ViewFacultyChoice.html', title='Electives Chosen by Faculty', fac_list = fac_list)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -106,6 +133,14 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        add_supporting_data(user, form.name.data)
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+def add_supporting_data(user, name):
+    if(user.role == 'Faculty'):
+        fac = Faculty(user_id = user.id, name = name, elective_id = "None")
+        db.session.add(fac)
+        db.session.commit()
+        print(fac)

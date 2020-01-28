@@ -3,11 +3,10 @@
 {% block app_content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     {% if role == 'Chairperson' %}
-    <div><p><b> Vanakkm da Chairu</b></p></div>
-    {% include 'chairpersonDashboard.html' %}
+        {% include 'chairpersonDashboard.html' %}
     {% elif role == 'Student' %}
-    <div><p><b> Vanakkm da Mapla</b></p></div>
+        <div><p><b> Vanakkm da Mapla</b></p></div>
     {% elif role == 'Faculty' %}
-    <div><p><b> Vanakkm da Vaathi</b></p></div>
+        {% include 'facultyDashboard.html' %}
     {% endif %}
 {% endblock %}

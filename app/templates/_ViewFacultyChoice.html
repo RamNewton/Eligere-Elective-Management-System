@@ -1,0 +1,8 @@
+<tr>
+    <td> {{item.name}} </td>
+    {% if item.elective_id == 'None' %}
+        <td> Not Chosen Yet </td>
+    {% else %}
+        <td> {{item.elective_id}} </td>
+    {% endif %}
+</tr>

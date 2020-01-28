@@ -1,0 +1,10 @@
+<tr>
+    <td> {{elective.electiveID}} </td>
+    <td> {{elective.electiveName}} </td>
+    <td style="word-wrap: break-word"> {{elective.electiveDescription}} </td>
+    <td> 
+        {% if choice == 'None' %}
+            <a href = "{{url_for('funcChooseElectiveToOffer', elective_id = elective.electiveID)}}" > Choose </a>
+        {% endif %}
+    </td>
+</tr>
