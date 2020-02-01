@@ -1,3 +1,5 @@
+#File that initialises the WebApp, refer the blog
+
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
