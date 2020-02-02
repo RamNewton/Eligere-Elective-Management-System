@@ -41,7 +41,6 @@ def requires_role(role):
 @app.route('/index')
 @login_required
 def index():
-    print(session['role'])
     user = {'username': 'Miguel'}
     posts = [
         {
@@ -66,7 +65,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
+        login_user(user)
         #Using session object to store the role of the User
         session['role'] = user.role
         return redirect(url_for('index'))
@@ -79,8 +78,9 @@ def logout():
         return redirect(url_for('login'))
     logout_user()
     #Removing the 'role' of the user from the session object on logout.
-    if(session['role']):
-        session.pop('role')
+    if 'role' in session:
+        if(session['role']):
+            session.pop('role')
     return redirect(url_for('login'))
 
 #Chaiperson Role: Adding Electives to the InitialElectiveList Endpoint

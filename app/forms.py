@@ -16,7 +16,6 @@ from app.models import InitialElectiveList, User
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
 #Form used by Chairperson to add Electives to the System
