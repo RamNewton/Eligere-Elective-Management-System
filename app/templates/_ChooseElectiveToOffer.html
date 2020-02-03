@@ -4,7 +4,7 @@
     <td style="word-wrap: break-word"> {{elective.electiveDescription}} </td>
     <td> 
         {% if choice == 'None' %}
-            <a href = "{{url_for('funcChooseElectiveToOffer', elective_id = elective.electiveID)}}" > Choose </a>
+            <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = elective.electiveID)}}" > Choose </a>
         {% endif %}
     </td>
 </tr>

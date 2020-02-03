@@ -5,7 +5,7 @@
 {% if choice != 'None' %}
     <h2> You have currently chosen to offer {{choice}} </h2>
     <br>
-    <h4> <a href = "{{url_for('funcChooseElectiveToOffer', elective_id = 'None')}}" > Click here to reset your choice </a> </h4>
+    <h4> <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = 'None')}}" > Click here to reset your choice </a> </h4>
 {% else %}
     <h2> You have not chosen to offer any electives yet </h2>
 {% endif %}
