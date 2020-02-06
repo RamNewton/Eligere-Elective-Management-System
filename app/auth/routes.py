@@ -54,9 +54,10 @@ def logout():
 #Endpoint to register new Users to the system
 #(Currently accessible by anyone. Later we'll restrict it to Chairperson Role Only)
 @bp.route('/register', methods=['GET', 'POST'])
+@requires_role('Chairperson')
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, role = form.role.data)
@@ -64,8 +65,8 @@ def register():
         db.session.add(user)
         db.session.commit()
         add_supporting_data(user, form.name.data)
-        flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('auth.login'))
+        flash('New User successfully registered!')
+        return redirect(url_for('main.index'))
     return render_template('auth/register.html', title='Register', form=form)
 
 #Helper function for register

@@ -10,6 +10,7 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Re
 
 #Importing table models from DataBase
 from app.models import InitialElectiveList, User
+import re
 
 #Form used by Chairperson to add Electives to the System
 class AddElectives(FlaskForm):
@@ -20,5 +21,12 @@ class AddElectives(FlaskForm):
 
     def validate_elective_id(self, elective_id):
         tmp = InitialElectiveList.query.filter_by(electiveID=elective_id.data).first()
+        
+        pat = re.compile("^[A-Z]{3}[0-9]{3}$")
+
+        if pat.match(elective_id.data) is None:
+            raise ValidationError('Elective ID is in unexpected form.\nShould be like CSEXXX')
+
         if tmp is not None:
             raise ValidationError('Please enter a different elective id.')
+        
