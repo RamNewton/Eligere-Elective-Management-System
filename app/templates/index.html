@@ -5,8 +5,10 @@
     {% if role == 'Chairperson' %}
         {% include 'chairpersonDashboard.html' %}
     {% elif role == 'Student' %}
-        <div><p><b> Hello Student </b></p></div>
+        {% include 'studentDashboard.html' %}
     {% elif role == 'Faculty' %}
         {% include 'facultyDashboard.html' %}
+    {% elif role == 'Admin' %}
+        {% include 'adminDashboard.html' %} 
     {% endif %}
 {% endblock %}

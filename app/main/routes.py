@@ -8,7 +8,7 @@ from flask_login import current_user, login_required
 from app import db
 
 #Importing table models using which data is added, removed, updated in the database
-from app.models import InitialElectiveList, User, Faculty
+from app.models import InitialElectiveList, User, Faculty, Student, FacultyDetails, StudentDetails
 
 from app.main import bp
 
@@ -32,6 +32,7 @@ def requires_role(role):
 @bp.route('/index')
 @login_required
 def index():
+    print(session['role'])
     return render_template('index.html', title='Home', role = session['role'])
 
 #Chaiperson Role: Adding Electives to the InitialElectiveList Endpoint
@@ -45,6 +46,7 @@ def addElectives():
         db.session.add(elective)
         db.session.commit()
         flash("Added Elective!")
+        return redirect(url_for('main.addElectives'))
     return render_template('AddElectives.html',  title='Add Electives', form=form)
 
 #Chairperson Role: Showing Electives that have been added so far Endpoint
@@ -97,5 +99,17 @@ def funcChooseElectiveToOffer(elective_id):
 @bp.route('/ViewFacultyChoice')
 @requires_role('Faculty')
 def viewFacultyChoice():
-    fac_list = Faculty.query.all()
+    tmp_list = Faculty.query.all()
+    fac_list = []
+
+    # Consider changing logic to JOIN    
+    for x in tmp_list:
+        f = FacultyDetails.query.filter_by(fac_id = x.fac_id).first()
+        name = f.name
+        fac_id = f.fac_id
+        elective = x.elective_id
+        if elective != "None":
+            elective = elective + " : " + (InitialElectiveList.query.filter_by(electiveID = x.elective_id).first()).electiveName
+        fac_list.append({"name" : name, "fac_id" : fac_id, "elective" : elective})
+
     return render_template('ViewFacultyChoice.html', title='Electives Chosen by Faculty', fac_list = fac_list)

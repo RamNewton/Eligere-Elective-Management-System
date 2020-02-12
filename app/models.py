@@ -16,10 +16,25 @@ def load_user(id):
 class Faculty(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, index = True)
-    name = db.Column(db.String(40), index=True)
+    #Remove name add Fac_ID instead
+    fac_id = db.Column(db.String(40), index=True)
     elective_id = db.Column(db.String(10), index = True)
+
+    #Add email option instead
     def __repr__(self):
         return '<Fac {}, User_id : {}, Elective_id : {}>'.format(self.id, self.user_id, self.elective_id)
+
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, index = True)
+    name = db.Column(db.String(40), index=True)
+    roll_number = db.Column(db.String(30), index=True)
+    elective_id1 = db.Column(db.String(10), index = True)
+    # elective_id2 = db.Column(db.String(10), index = True)
+    # elective_id3 = db.Column(db.String(10), index = True)
+
+    def __repr__(self):
+        return '<Student {}, User_id : {}, Elective_id : {}>'.format(self.id, self.user_id, self.elective_id1)
 
 #Database Table that holds details of all Types of Users
 class User(UserMixin, db.Model):
@@ -50,3 +65,23 @@ class InitialElectiveList(db.Model):
     def __repr__(self):
         return '<Elective {}>'.format(self.electiveName)
 
+class ElectiveListv2(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    electiveID = db.Column(db.String(64), index = True, unique = True)
+    electiveName = db.Column(db.String(64), index=True, unique=True)
+    electiveDescription = db.Column(db.String(500))
+
+class FacultyDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    fac_id = db.Column(db.String(10), index = True, unique = True)
+    name = db.Column(db.String(10), index = True)
+    designation = db.Column(db.String(10), index = True)
+    department = db.Column(db.String(10), index = True)
+
+class StudentDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    roll_no = db.Column(db.String(10), index = True, unique = True)
+    name = db.Column(db.String(10), index = True)
+    batch = db.Column(db.String(10), index = True)
+    section = db.Column(db.String(10), index = True)
+    department = db.Column(db.String(10), index = True)
