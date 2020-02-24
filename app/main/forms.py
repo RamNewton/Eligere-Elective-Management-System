@@ -17,7 +17,7 @@ class AddElectives(FlaskForm):
     elective_id = StringField("Elective ID", validators = [DataRequired()])
     elective_name = StringField("Elective Name", validators = [DataRequired()])
     elective_description = StringField("Elective Description", widget = TextArea(), validators = [DataRequired()])
-    submit = SubmitField('Submit Elective')
+    submit = SubmitField('Add Elective')
 
     def validate_elective_id(self, elective_id):
         tmp = InitialElectiveList.query.filter_by(electiveID=elective_id.data).first()

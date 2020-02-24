@@ -32,7 +32,7 @@ class UserModelCase(unittest.TestCase):
         chrome_driver_path = dir + "\chromedriver.exe"
 
         driver = webdriver.Chrome(executable_path = chrome_driver_path)
-        driver.implicitly_wait(10)
+        driver.implicitly_wait(100)
         driver.maximize_window()
 
         username_field = driver.find_element_by_id("username")

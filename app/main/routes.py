@@ -76,6 +76,8 @@ def funcRemoveElective(elective_id):
 def chooseElectiveToOffer():
     electives = InitialElectiveList.query.all()
     tmp = Faculty.query.filter_by(user_id = current_user.id).first()
+    print(tmp)
+    print(Faculty.query.all())
     chosen_elective_id = tmp.elective_id
     return render_template('ChooseElectiveToOffer.html', title='Choose Elective to Offer', electives = electives, choice = chosen_elective_id)
 
