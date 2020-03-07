@@ -51,26 +51,6 @@ def logout():
             session.pop('role')
     return redirect(url_for('auth.login'))
 
-
-#Should be scraped Later
-#Endpoint to register new Users to the system
-#(Currently accessible by anyone. Later we'll restrict it to Chairperson Role Only)
-@bp.route('/register', methods=['GET', 'POST'])
-@requires_role('Chairperson')
-def register():
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('main.index'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, role = form.role.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        add_supporting_data(user, form.name.data)
-        flash('New User successfully registered!')
-        return redirect(url_for('main.index'))
-    return render_template('auth/register.html', title='Register', form=form)
-
 #Should be scraped Later
 #Helper function for register
 def add_supporting_data(user, name):
@@ -115,7 +95,7 @@ def registerStudent():
     return render_template('auth/registerStudent.html', title='Register Student', form=form)
 
 def add_to_Student(user, roll_number):
-    s = Student(user_id = user.id, roll_number = roll_number, elective_id1 = "None")
+    s = Student(user_id = user.id, roll_number = roll_number, elective_id1 = "None", elective_id2 = "None", elective_id3 = "None")
     db.session.add(s)
     db.session.commit()
     print(s)
@@ -127,12 +107,12 @@ def add_to_Student(user, roll_number):
 def addStudentDetails():
     form = AddStudentDetails()
     if form.validate_on_submit():
-        roll_number = form.roll_number.data
+        roll_number = form.roll_no.data
         name = form.name.data
         department = form.department.data
         section = form.section.data
         batch = form.batch.data
-        s = StudentDetails(roll_number = roll_number, name = name, department = department, section = section, batch = batch)
+        s = StudentDetails(roll_no = roll_number, name = name, department = department, section = section, batch = batch)
         db.session.add(s)
         db.session.commit()
         flash("Student Details Added")

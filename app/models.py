@@ -30,8 +30,10 @@ class Student(db.Model):
     name = db.Column(db.String(40), index=True)
     roll_number = db.Column(db.String(30), index=True)
     elective_id1 = db.Column(db.String(10), index = True)
-    # elective_id2 = db.Column(db.String(10), index = True)
-    # elective_id3 = db.Column(db.String(10), index = True)
+    elective_id2 = db.Column(db.String(10), index = True)
+    elective_id3 = db.Column(db.String(10), index = True)
+    allotted_elective = db.Column(db.String(10), index = True)
+    random_elective = db.Column(db.String(10), index = True)
 
     def __repr__(self):
         return '<Student {}, User_id : {}, Elective_id : {}>'.format(self.id, self.user_id, self.elective_id1)
@@ -70,6 +72,9 @@ class ElectiveListv2(db.Model):
     electiveID = db.Column(db.String(64), index = True, unique = True)
     electiveName = db.Column(db.String(64), index=True, unique=True)
     electiveDescription = db.Column(db.String(500))
+
+    def __repr__(self):
+        return '<Elective {}>'.format(self.electiveName)
 
 class FacultyDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)

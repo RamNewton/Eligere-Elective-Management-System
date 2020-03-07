@@ -1,6 +1,31 @@
-<div><p><b> ~ Student ~ </b></p></div>
-<table class="table table-hover">
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('main.chooseElectiveToOffer') }}"> Enter Elective Preference </a></h1></th>
-    </tr>
-</table>
+    <div class="row">
+    <div class="col-md-4">
+        <div><h2> Hello, {{current_user.username}}! </h2></div>
+        <h4> Roll Number : {{data.roll_number }} </h4>
+    </div>
+    <div class="col-md-4">
+            {% if allot_elective %}
+            <div class="list-group">
+                <h4 class="list-group-item list-group-item-success text-center"> The Elective Allotted to you is : <br>  </h4>
+            </div>
+            {% endif %}
+    </div>
+    <div class = "col-md-4 text-right">
+        <h3> {{data.name}}, Student </h3>
+        <h4> {{data.department}} : {{data.batch}} </h4>
+        <h5> Section : {{data.section}} </h5>
+    </div>
+</div>
+
+{% if allot_elective %}
+<h3>The Elective Allotted to you is : </h3>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <h3><a href = "{{ url_for('main.chooseElectiveToStudy') }}" class = "list-group-item"> Choose Elective Preference </a></h3>
+            <h3><a href = "{{ url_for('main.viewCourseOfferingFaculty') }}" class = "list-group-item"> View Course Offering Faculty </a></h3>
+        </div>
+    </div>
+</div>

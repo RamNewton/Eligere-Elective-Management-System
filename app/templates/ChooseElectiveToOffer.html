@@ -3,24 +3,24 @@
 {% block app_content %}
 
 {% if choice != 'None' %}
-    <h2> You have currently chosen to offer {{choice}} </h2>
-    <br>
-    <h4> <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = 'None')}}" > Click here to reset your choice </a> </h4>
+    <div class="list-group">
+        <h3 class="list-group-item list-group-item-success">You have currently chosen to offer {{choice}}</h3>
+    </div>
+    <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = 'None')}}"> <button type="button" class="btn btn-danger btn-md"> Reset Choice </button></a>
 {% else %}
-    <h2> You have not chosen to offer any electives yet </h2>
+    <div class="list-group">
+        <h3 class="list-group-item list-group-item-warning"> You have not chosen an elective yet </h3>
+    </div>
 {% endif %}
 <br>
-<br>
 
-<table class="table table-hover" style="table-layout: fixed">
-    <tr>
-        <th> Elective ID </th>
-        <th> Elective Name </th>
-        <th> Elective Description </th>
-        <th>  </th>
-    </tr>
-{% for elective in electives %}
-    {% include '_ChooseElectiveToOffer.html' %}
-{% endfor %}
-</table>
+<div class="row">
+        <div class="col-md-12">
+            {% for elective in electives %}
+                {% include '_ChooseElectiveToOffer.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 {% endblock %}

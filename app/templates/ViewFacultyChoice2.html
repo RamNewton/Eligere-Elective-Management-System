@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h1> Current Choices of Faculty </h1>
+    </div>
+</div>
+
+<br>
+    {% for elective in fac_list %}
+    <div class="span4 collapse-group">
+        <div class="row">
+                <div class="col-md-8">
+                    <h3>{{elective + ": " + fac_list[elective]['name'] }}</h3>
+                    <p class="collapse" id="{{'viewdetails' + elective }}">
+                            {% for x in fac_list[elective]['faculty'] %}
+                                {{ x[1] + " - " + x[0] }} <br>
+                            {% endfor %}
+                    </p>
+                    <p><a class="btn" data-toggle="collapse" data-target="#{{'viewdetails' + elective}}"> Faculty offering this course &raquo;</a></p>
+                </div>
+                <div class = col-md-4>
+                    <h3>{{" (" + (fac_list[elective]['faculty']|length)|string + ")"}}</h3>
+                </div>
+        </div>
+    </div>
+    {% endfor %}
+</table>
+
+{% endblock %}

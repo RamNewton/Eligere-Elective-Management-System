@@ -1,9 +1,25 @@
-<div><p><b> ~ Faculty ~ </b></p></div>
-<table class="table table-hover">
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('main.chooseElectiveToOffer') }}"> Choose Elective </a></h1></th>
-    </tr>
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('main.viewFacultyChoice') }}"> View Faculty Choice </a></h1></th>
-    </tr>
-</table>
+<div class="row">
+    <div class="col-md-4">
+        <div><h2> Hello, {{current_user.username}}! </h2></div>
+        <h4> Faculty ID : {{data.id }} </h4>
+    </div>
+    <div class="col-md-4">
+            {% if data['elective_id'] != 'None' %}
+            <div class="list-group">
+                <h4 class="list-group-item list-group-item-success text-center"> Course you have chosen: <br> {{data['elective_id']}} </h4>
+            </div>
+            {% endif %}
+    </div>
+    <div class = "col-md-4 text-right" >
+        <h3> {{data.name}}, {{data.designation}} </h3>
+        <h4> {{data.department}} </h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <h3><a href = "{{ url_for('main.chooseElectiveToOffer') }}" class = "list-group-item"> Choose Elective </a></h3>
+            <h3><a href = "{{ url_for('main.viewFacultyChoice') }}" class = "list-group-item"> View Faculty Choices </a></h3>
+        </div>
+    </div>
+</div>

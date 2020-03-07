@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-<table class="table table-hover" style="table-layout: fixed">
-    <tr>
-        <th> Elective ID </th>
-        <th> Elective Name </th>
-        <th> Elective Description </th>
-        <th>  </th>
-    </tr>
+<div class="row">
+    <div class="my-cb center-block">
+            
+    </div>
+ </div>
+ <div class="row">
+    <div class="col-md-6 col-md-offset-4">
+        <h1> List of Electives </h1>
+    </div>
+ </div>
 {% for elective in electives %}
     {% include '_ShowElectives.html' %}
 {% endfor %}
-</table>
+
 {% endblock %}

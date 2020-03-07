@@ -1,15 +1,62 @@
-<div><p><b> ~ Chairperson ~ </b></p></div>
-<table class="table table-hover">
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('main.addElectives') }}"> Add Electives </a></h1></th>
-    </tr>
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('main.showElectives') }}"> Show Electives </a></h1></th>
-    </tr>
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('auth.registerFaculty') }}"> Register Faculty </a></h1></th>
-    </tr>
-    <tr>
-        <th width="256px"><h1><a href = "{{ url_for('auth.registerStudent') }}"> Register Student </a></h1></th>
-    </tr>
-</table>
+<div class="row">
+    <div class="col-md-6">
+        <div><h2> Hello, {{current_user.username}}! </h2></div>
+        <h4> Faculty ID : 001 </h4>
+    </div>
+    <div class = "col-md-6 text-right" >
+        <h3> Ram, Chairperson </h3>
+        <h4> Computer Science </h4>
+    </div>
+</div>
+    <br>
+<div class="row">
+    <div class="col-md-4">
+        <div class="list-group">
+            <h2 class = "text-center" > Electives </h2>
+            <h3><a href = "{{ url_for('main.addElectives') }}" class = "list-group-item"> Add New </a></h3>
+            <h3><a href = "{{ url_for('main.showElectives') }}" class = "list-group-item"> Show List </a></h3>
+            <h3><a href = "{{ url_for('main.viewFacultyChoice') }}" class = "list-group-item"> Faculty Choices </a></h3>
+            <h3><a href = "{{ url_for('main.viewCourseOfferingFacultyCP') }}" class = "list-group-item"> Faculty Assigned to Courses </a></h3>
+            <h3><a href = "{{ url_for('main.index') }}" class = "list-group-item">  Elective Allotted List </a></h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="list-group">
+            <h2 class = "text-center" > Portal Management </h2>
+            {%if data['FacultyOpen'] == 'False'%}
+            <h3 class = 'text-center'><a href = "{{ url_for('main.FacultyPortal', status = 'True') }}" class = "btn btn-success btn-lg"> Open Faculty Portal </a></h3>   
+            {%endif%}
+
+            {%if data['FacultyOpen'] == 'True'%}  
+            <h3 class = 'text-center'><a href = "{{ url_for('main.FacultyPortal', status = 'False') }}" class = "btn btn-danger btn-lg"> Close Faculty Portal </a></h3>   
+            {%endif%}
+
+            {%if data['StudentOpen'] == 'False'%} 
+            <h3 class = 'text-center'><a href = "{{ url_for('main.StudentPortal', status = 'True') }}" class = "btn btn-success btn-lg"> Open Student Portal </a></h3>   
+            {%endif%}
+
+            {%if data['StudentOpen'] == 'True'%} 
+            <h3 class = 'text-center'><a href = "{{ url_for('main.StudentPortal', status = 'False') }}" class = "btn btn-danger btn-lg"> Close Student Portal </a></h3>
+            {%endif%}
+
+            <br>
+            {% if data['v2gen'] == 'False' %}
+                <h3 class = 'text-center'><a href = "{{url_for('main.generateListv2')}}"><button type="button" class="btn btn-success btn-lg"> Consolidate Elective List for Students </button></a></h3>
+            {% else %}
+                <h3 class = 'text-center'><a href = "{{url_for('main.scrapeConsolidatedList')}}"><button type="button" class="btn btn-danger btn-lg"> Scrape Consolidated List </button></a></h3>
+            {% endif %}
+
+            <h3 class = 'text-center'><button type="button" class="btn btn-success btn-lg text-center"> Allot Elective to Students </button></h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="list-group">
+            <h2 class = "text-center" > Register </h2>
+            <h3><a href = "{{ url_for('auth.registerFaculty') }}" class = "list-group-item"> Faculty </a></h3>
+            <h3><a href = "{{ url_for('auth.registerStudent') }}" class = "list-group-item"> Student </a></h3>
+        </div>
+    </div>
+
+</div>

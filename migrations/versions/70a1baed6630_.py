@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: eed6fc910327
+Revision ID: 70a1baed6630
 Revises: 
-Create Date: 2020-02-10 14:28:55.807591
+Create Date: 2020-03-04 19:56:20.687354
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'eed6fc910327'
+revision = '70a1baed6630'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -64,9 +64,15 @@ def upgrade():
     sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('roll_number', sa.String(length=30), nullable=True),
     sa.Column('elective_id1', sa.String(length=10), nullable=True),
+    sa.Column('elective_id2', sa.String(length=10), nullable=True),
+    sa.Column('elective_id3', sa.String(length=10), nullable=True),
+    sa.Column('allotted_elective', sa.String(length=10), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_student_allotted_elective'), 'student', ['allotted_elective'], unique=False)
     op.create_index(op.f('ix_student_elective_id1'), 'student', ['elective_id1'], unique=False)
+    op.create_index(op.f('ix_student_elective_id2'), 'student', ['elective_id2'], unique=False)
+    op.create_index(op.f('ix_student_elective_id3'), 'student', ['elective_id3'], unique=False)
     op.create_index(op.f('ix_student_name'), 'student', ['name'], unique=False)
     op.create_index(op.f('ix_student_roll_number'), 'student', ['roll_number'], unique=False)
     op.create_index(op.f('ix_student_user_id'), 'student', ['user_id'], unique=False)
@@ -111,7 +117,10 @@ def downgrade():
     op.drop_index(op.f('ix_student_user_id'), table_name='student')
     op.drop_index(op.f('ix_student_roll_number'), table_name='student')
     op.drop_index(op.f('ix_student_name'), table_name='student')
+    op.drop_index(op.f('ix_student_elective_id3'), table_name='student')
+    op.drop_index(op.f('ix_student_elective_id2'), table_name='student')
     op.drop_index(op.f('ix_student_elective_id1'), table_name='student')
+    op.drop_index(op.f('ix_student_allotted_elective'), table_name='student')
     op.drop_table('student')
     op.drop_index(op.f('ix_initial_elective_list_electiveName'), table_name='initial_elective_list')
     op.drop_index(op.f('ix_initial_elective_list_electiveID'), table_name='initial_elective_list')

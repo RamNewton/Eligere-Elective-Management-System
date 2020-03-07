@@ -1,10 +1,16 @@
-<tr>
-    <td> {{elective.electiveID}} </td>
-    <td> {{elective.electiveName}} </td>
-    <td style="word-wrap: break-word"> {{elective.electiveDescription}} </td>
-    <td> 
-        {% if choice == 'None' %}
-            <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = elective.electiveID)}}" > Choose </a>
-        {% endif %}
-    </td>
-</tr>
+<div class="span4 collapse-group">
+        <div class="row">
+                <div class="col-md-8">
+                    <h3>{{elective.electiveID + ": " + elective.electiveName}}</h3>
+                    <p class="collapse" id="{{'viewdetails' + elective.electiveID}}">
+                            {{elective.electiveDescription}}
+                    </p>
+                    <p><a class="btn" data-toggle="collapse" data-target="#{{'viewdetails' + elective.electiveID}}">View Course details &raquo;</a></p>
+                </div>
+                {% if choice == 'None' %}
+                    <div class="col-md-4">
+                        <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = elective.electiveID)}}" ><button type="button" class="btn btn-success btn-md"> Choose </button></a>
+                    </div>
+                {% endif %}
+        </div>
+</div>
