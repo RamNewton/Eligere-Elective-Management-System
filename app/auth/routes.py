@@ -27,10 +27,12 @@ def requires_role(role):
 #Login Endpoint
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
+    print("GET")
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = LoginForm()
     if form.validate_on_submit():
+        print("POST")
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
