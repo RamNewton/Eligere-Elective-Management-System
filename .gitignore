@@ -4,3 +4,4 @@ chromedriver.exe
 example_suite/
 ui_reports/
 unit_reports/
+test_cp_functionalities.py
