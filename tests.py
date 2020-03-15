@@ -100,7 +100,7 @@ class StudentCase(unittest.TestCase):
         db.session.add(s)
         db.session.commit()
 
-        g = Student(roll_number = "CSE17001", user_id = s.roll_no,name="Shreya", elective_id1 = "None", elective_id2 = "None", elective_id3 = "None",allocated_elective="None",random_elective="None")
+        g = Student(roll_number = "CSE17001", user_id = s.roll_no,name="Shreya", elective_id1 = "None", elective_id2 = "None", elective_id3 = "None",allotted_elective="None",random_elective="None")
         db.session.add(g)
         db.session.commit()
 
@@ -127,9 +127,9 @@ class InitialElectiveListCase(unittest.TestCase):
         i = InitialElectiveList(electiveID = "CSE387",electiveName="OpenLab",electiveDescription="OpenLab Description")
         db.session.add(i)
         db.session.commit()
-        p = StudentDetails.query.filter_by(id = i.id).first()
+        p = InitialElectiveList.query.filter_by(id = i.id).first()
         self.assertEqual(p.electiveID, "CSE387")
-        self.assertEqual(p.electiveName, "Open Lab")
+        self.assertEqual(p.electiveName, "OpenLab")
 
     def test_initial_elective_list_check(self):
         f = FacultyDetails(fac_id = "CSE333", name = "venkat", designation = "Prof", department = "CSE")
@@ -145,7 +145,7 @@ class InitialElectiveListCase(unittest.TestCase):
 
         for row in res:
             self.assertEqual(row[3], "CSE387")
-            self.assertEqual(row[6], "Open Lab")
+            self.assertEqual(row[6], "OpenLab")
 
 class ElectiveListv2Case(unittest.TestCase):
     def setUp(self):
@@ -163,7 +163,7 @@ class ElectiveListv2Case(unittest.TestCase):
         e = ElectiveListv2(electiveID = "CSE312",electiveName="Pattern Recognition",electiveDescription="Pattern Recognition Details")
         db.session.add(e)
         db.session.commit()
-        p = StudentDetails.query.filter_by(id = e.id).first()
+        p = ElectiveListv2.query.filter_by(id = e.id).first()
         self.assertEqual(p.electiveID, "CSE312")
         self.assertEqual(p.electiveName, "Pattern Recognition")
 
