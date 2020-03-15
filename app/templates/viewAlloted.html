@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+
+<div class="row">
+        <div class="col-md-6 col-md-offset-4">
+            <h1> Elective Allotment List </h1>
+        </div>
+    </div>
+    <br>
+    <br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Roll No</th>
+              <th>Elective ID  </th>
+              <th>Elective Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%for x in students %}
+                <tr>
+                <td>{{x.roll_number}}</td>
+                {% if x.random_elective == 'False' %}
+                    <td>{{x.allotted_elective}}</td>
+                {% else %}
+                    <td>{{x.allotted_elective + ' *'}}</td>
+                {% endif %}
+                <td>{{M[x.allotted_elective]}}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5" class="text-center"> * : Randomly Allocated </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!--end of .table-responsive-->
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

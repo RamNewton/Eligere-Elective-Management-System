@@ -4,9 +4,12 @@
         <h4> Roll Number : {{data.roll_number }} </h4>
     </div>
     <div class="col-md-4">
-            {% if allot_elective %}
+            {% if json['v3gen'] == 'True' %}
             <div class="list-group">
-                <h4 class="list-group-item list-group-item-success text-center"> The Elective Allotted to you is : <br>  </h4>
+                <h4 class="list-group-item list-group-item-success text-center"> The Elective Allotted to you is <br> {{data['allot']}} </h4>
+                {% if data['rand'] == 'True' %}
+                    <h6 class="list-group-item list-group-item-warning text-center"> Note: You were randomly allocated. </h6>
+                {% endif %}
             </div>
             {% endif %}
     </div>

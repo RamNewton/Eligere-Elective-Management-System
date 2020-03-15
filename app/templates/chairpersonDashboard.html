@@ -18,7 +18,7 @@
             <h3><a href = "{{ url_for('main.showElectives') }}" class = "list-group-item" id = "Show List"> Show List </a></h3>
             <h3><a href = "{{ url_for('main.viewFacultyChoice') }}" class = "list-group-item" id = "Faculty Choices"> Faculty Choices </a></h3>
             <h3><a href = "{{ url_for('main.viewCourseOfferingFacultyCP') }}" class = "list-group-item" id = "Faculty Assigned to Courses"> Faculty Assigned to Courses </a></h3>
-            <h3><a href = "{{ url_for('main.index') }}" class = "list-group-item" id = "Elective Allotted List">  Elective Allotted List </a></h3>
+            <h3><a href = "{{ url_for('main.ElectiveAllottedList') }}" class = "list-group-item" id = "Elective Allotted List">  Elective Allotted List </a></h3>
         </div>
     </div>
 
@@ -45,10 +45,17 @@
             {% if data['v2gen'] == 'False' %}
                 <h3 class = 'text-center' id="Consolidate Elective List for Students"><a href = "{{url_for('main.generateListv2')}}"><button type="button" class="btn btn-success btn-lg"> Consolidate Elective List for Students </button></a></h3>
             {% else %}
-                <h3 class = 'text-center' id="Scrape Consolidated List"><a href = "{{url_for('main.scrapeConsolidatedList')}}"><button type="button" class="btn btn-danger btn-lg"> Scrape Consolidated List </button></a></h3>
+                <h4 class="list-group-item list-group-item-info text-center"> Electives Consolidated for Students </h4>
+                <!-- <h3 class = 'text-center' id="Scrape Consolidated List"><a href = "{{url_for('main.scrapeConsolidatedList')}}"><button type="button" class="btn btn-danger btn-lg"> Scrape Consolidated List </button></a></h3> -->
             {% endif %}
 
-            <h3 class = 'text-center' id="Allot Elective to Students"><button type="button" class="btn btn-success btn-lg text-center"> Allot Elective to Students </button></h3>
+
+            {% if data['v3gen'] == 'False' %}
+                <h3 class = 'text-center' id="Allot Elective to Students"><a href = "{{url_for('main.generateListv3')}}"><button type="button" class="btn btn-success btn-lg text-center"> Allot Elective to Students </button></a></h3>
+            {% else %}
+                <h4 class="list-group-item list-group-item-info text-center"> Electives Alloted for Students </h4>
+                <!-- <h3 class = 'text-center' id="Scrape Alloted List"><a href = "{{url_for('main.scrapeListv3')}}"><button type="button" class="btn btn-danger btn-lg"> Scrape Elective Allotment </button></a></h3> -->
+            {% endif %}
         </div>
     </div>
 

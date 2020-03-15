@@ -46,11 +46,14 @@ def index():
         return render_template('index.html', title='Home', role = session['role'], data = data)
 
     elif(session['role'] == 'Student'):
-        tmp = Student.query.filter_by(user_id = current_user.id).first()
-        roll_number = tmp.roll_number
+        tmp1 = Student.query.filter_by(user_id = current_user.id).first()
+        allot = tmp1.allotted_elective
+        rand = tmp1.random_elective
+        roll_number = tmp1.roll_number
         tmp = StudentDetails.query.filter_by(roll_no = roll_number).first()
-        data = {'name' : tmp.name, 'batch' : tmp.batch, 'department': tmp.department, 'section' : tmp.section, 'roll_number': roll_number}
-        return render_template('index.html', title='Home', role = session['role'], data = data)
+        data = {'name' : tmp.name, 'batch' : tmp.batch, 'department': tmp.department, 'section' : tmp.section, 'roll_number': roll_number, 'rand' : rand, 'allot' : allot}
+        json = read_json()
+        return render_template('index.html', title='Home', role = session['role'], data = data, json = json)
 
     else:
         return render_template('index.html', title='Home', role = session['role'])
@@ -170,7 +173,7 @@ def generateListv2():
         for row in tmp:
             cnt = row[0]
 
-        if int(cnt) >= 1:
+        if int(cnt) > 1:
             electivesV2 += [x]
         
     for x in electivesV2:
@@ -198,6 +201,8 @@ def scrapeConsolidatedList():
         ElectiveListv2.query.delete()
         db.session.commit()
         flash('Consolidated List has been Scraped')
+        data['v2gen'] = 'False'
+        write_json(data)
         return redirect(url_for('main.index'))
 
 @bp.route('/test')
@@ -290,7 +295,7 @@ def viewCourseOfferingFaculty():
 @requires_role('Chairperson')
 def viewCourseOfferingFacultyCP():
     data = read_json()
-    if(data['v2gen'] == False):
+    if(data['v2gen'] == 'False'):
         flash("Courses have not been assigned to Faculty yet!")
         return redirect(url_for('main.index'))
 
@@ -354,11 +359,47 @@ def StudentPortal(status):
 
 
 #Write Query to finish this off
-@bp.route('/GenerateElectiveListv3')
+@bp.route('/GenerateListv3')
 @requires_role('Chairperson')
-def GenerateElectiveListv3():
-    flash("The final Elective Allotment List has been generated!")
+def generateListv3():
+
+    data = read_json()
+    
+    if(data['StudentOpen'] == 'True' or data['FacultyOpen'] == 'True'):
+        flash("Portal open for Students. Cannot Allot Electives!")
+        return redirect(url_for('main.index'))
+
+    else:
+        flash("The final Elective Allotment List has been generated!")
+        data['v3gen'] = 'True'
+        write_json(data)
+        return redirect(url_for('main.index'))
+
+
+@bp.route('/ScrapeListv3')
+@requires_role('Chairperson')
+def scrapeListv3():
+    data = read_json()
+    
+    flash("The Elective Allotment has been scraped!")
+    data['v3gen'] = 'False'
+    write_json(data)
     return redirect(url_for('main.index'))
+
+@bp.route('/ElectiveAllottedList')
+@requires_role('Chairperson')
+def ElectiveAllottedList():
+    data = read_json()
+    if(data['v3gen'] == 'True'):
+        tmp = Student.query.all()
+        tmp2 = ElectiveListv2.query.all()
+        M = {}
+        for x in tmp2:
+            M[x.electiveID] = x.electiveName
+        return render_template('viewAlloted.html', title='Elective Allotment List', M = M, students = tmp) 
+    else:
+        flash('Electives not yet allotted!')
+        return redirect(url_for('main.index'))
 
 @bp.route('/ViewFacultyChoice2')
 @requires_role('Thavaru')
