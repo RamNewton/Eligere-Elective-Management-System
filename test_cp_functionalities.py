@@ -3,6 +3,9 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
 
+from app import create_app, db
+from app.models import *
+
 class ChairpersonFunctionalitiesCase(unittest.TestCase):
     @classmethod
     def setUpClass(inst):
@@ -28,15 +31,17 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
         link = self.driver.find_element_by_id("logout")
         link.click()
 
-    def test_AddElectives_fail(self):
-        self.login("ram", "ram")
+    def test_AddElectives_fail(self):                                                  #done
+        self.login("ram", "ram1")
         self.driver.implicitly_wait(10)
 
-        a = self.driver.find_element_by_link_text('Add Electives')
-        self.driver.implicitly_wait(10)
+        print("Reached 1")
+        a = self.driver.find_element_by_id('Add New')
+       # print("Reached 2\n", a)
         a.click()
-
+        self.driver.get('http://localhost:5000/AddElectives')
         self.driver.implicitly_wait(10)
+
         elective_id = self.driver.find_element_by_id("elective_id")
         elective_id.send_keys("CS")
 
@@ -56,15 +61,15 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
         self.driver.implicitly_wait(10)
         self.logout()
 
-    def test_AddElectives_success(self):
+    def test_AddElectives_success(self):                                                       #done
         self.driver.get("http://localhost:5000/auth/logout")
         self.driver.implicitly_wait(10)
-        self.login("ram", "ram")
+        self.login("ram", "ram1")
         self.driver.implicitly_wait(10)
 
-        a = self.driver.find_element_by_link_text('Add Electives')
-        self.driver.implicitly_wait(10)
+        a = self.driver.find_element_by_id('Add New')
         a.click()
+        self.driver.get('http://localhost:5000/AddElectives')
 
         self.driver.implicitly_wait(10)
 
@@ -80,93 +85,126 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
         submit_button = self.driver.find_element_by_id("submit")
         submit_button.click()
 
+        # InitialElectiveList.query.filter_by(electiveID = 'CSE888').delete()
+        # db.session.commit()
         self.driver.implicitly_wait(10)
         text = self.driver.find_element_by_class_name("alert").text
         self.assertEqual(text, "Added Elective!")
 
         self.logout()
-    
-    def test_RemoveElectives(self):
+
+    def test_RemoveElectives(self):                                                    #done
         self.driver.get("http://localhost:5000/auth/logout")
         self.driver.implicitly_wait(10)
-        self.login("ram", "ram")
+        self.login("ram", "ram1")
         self.driver.implicitly_wait(10)
 
-        a = self.driver.find_element_by_link_text('Show Electives')
-        self.driver.implicitly_wait(10)
+        a = self.driver.find_element_by_id('Show List')
         a.click()
-
+        self.driver.get('http://localhost:5000/ShowElectives')
         self.driver.implicitly_wait(10)
 
-        l = self.driver.find_element_by_id('CSE888 remove')
+        l = self.driver.find_element_by_id('Remove CSE888')
         l.click()
+        text = self.driver.find_element_by_class_name("alert").text
+        self.assertEqual(text, "Access denied")
+        self.logout()
 
+
+    def test_Admin_faculty_success(self):                                            #done
+        self.driver.get("http://localhost:5000/auth/logout")
+        self.driver.implicitly_wait(10)
+        self.login("admin", "admin")
         self.driver.implicitly_wait(10)
 
-        l = self.driver.find_elements_by_id('CSE888 remove')
-        self.assertEqual(l, [])
+        a = self.driver.find_element_by_id('Add Faculty')
+        a.click()
+        self.driver.get('http://localhost:5000/auth/addFacultyDetails')
+        self.driver.implicitly_wait(10)
 
-    # def test_Regfaculty_success(self):
-    #     self.driver.get("http://localhost:5000/auth/logout")
-    #     self.driver.implicitly_wait(10)
-    #     self.login("ram","ram")
-    #     self.driver.implicitly_wait(10)
+        addfac_id = self.driver.find_element_by_id("fac_id")
+        addfac_id.send_keys("FC784")
 
-    #     a = self.driver.find_element_by_link_text('Register Faculty')
-    #     a.click()
+        addfac_name = self.driver.find_element_by_id("name")
+        addfac_name.send_keys("Pradeep")
 
-    #     self.driver.implicitly_wait(10)
+        addfac_desig = self.driver.find_element_by_id("designation")
+        addfac_desig.send_keys("Faculty")
 
-    #     faculty_id = self.driver.find_element_by_id("fac_id")
-    #     faculty_id.send_keys("FC678")
+        addfac_depart = self.driver.find_element_by_id("department")
+        addfac_depart.send_keys("CSE")
 
-    #     faculty_user = self.driver.find_element_by_id("username")
-    #     faculty_user.send_keys("Pradeep")
+        submit_button = self.driver.find_element_by_id("submit")
+        submit_button.click()
 
-    #     faculty_email = self.driver.find_element_by_id("email")
-    #     faculty_email.send_keys("pradeep30@gmail.com")
+        self.driver.implicitly_wait(10)
+        text = self.driver.find_element_by_class_name("alert").text
+        self.assertEqual(text, "Faculty Details Added")
 
-    #     faculty_pw = self.driver.find_element_by_id("password")
-    #     faculty_pw.send_keys("Pradeep123")
+        self.logout()
 
-    #     faculty_repw = self.driver.find_element_by_id("password2")
-    #     faculty_repw.send_keys("Pradeep123")
-
-    #     submit_button = self.driver.find_element_by_id("submit")
-    #     submit_button.click()
-
-    #     self.driver.implicitly_wait(10)
-    #     text = self.driver.find_element_by_class_name("alert").text
-    #     self.assertEqual(text, "Faculty Registered")
-
-    #     self.logout()
-
-    def test_Regfaculty_fail1(self):
+    def test_Regfaculty_fail1(self):                                                    #done
             self.driver.get("http://localhost:5000/auth/logout")
             self.driver.implicitly_wait(10)
-            self.login("ram", "ram")
+            self.login("ram", "ram1")
             self.driver.implicitly_wait(10)
 
-            a = self.driver.find_element_by_link_text('Register Faculty')
-            self.driver.implicitly_wait(10)
+            a = self.driver.find_element_by_id('Register Faculty')
             a.click()
 
+            self.driver.get('http://localhost:5000/auth/registerFaculty')
             self.driver.implicitly_wait(10)
 
             faculty_id = self.driver.find_element_by_id("fac_id")
-            faculty_id.send_keys("123")
+            faculty_id.send_keys("FC123")
 
             faculty_user = self.driver.find_element_by_id("username")
-            faculty_user.send_keys("Dummy")
+            faculty_user.send_keys("Pradeep")
 
             faculty_email = self.driver.find_element_by_id("email")
-            faculty_email.send_keys("Dummy")
+            faculty_email.send_keys("pradeep30@gmail.com")
 
             faculty_pw = self.driver.find_element_by_id("password")
-            faculty_pw.send_keys("abc")
+            faculty_pw.send_keys("Pradeep123")
 
             faculty_repw = self.driver.find_element_by_id("password2")
-            faculty_repw.send_keys("dummy")
+            faculty_repw.send_keys("Pradeep123")
+
+            submit_button = self.driver.find_element_by_id("submit")
+            submit_button.click()
+
+            self.driver.implicitly_wait(10)
+            text = self.driver.find_element_by_class_name("help-block").text
+            self.assertEqual(text, "A user with this Faculty ID already exists")
+
+            self.logout()
+
+
+    def test_Regfaculty_fail2(self):                                            #done
+            self.driver.get("http://localhost:5000/auth/logout")
+            self.driver.implicitly_wait(10)
+            self.login("ram", "ram1")
+            self.driver.implicitly_wait(10)
+
+            a = self.driver.find_element_by_id('Register Faculty')
+            a.click()
+            self.driver.get('http://localhost:5000/auth/registerFaculty')
+            self.driver.implicitly_wait(10)
+
+            faculty_id = self.driver.find_element_by_id("fac_id")
+            faculty_id.send_keys("FC555")
+
+            faculty_user = self.driver.find_element_by_id("username")
+            faculty_user.send_keys("Pradeep")
+
+            faculty_email = self.driver.find_element_by_id("email")
+            faculty_email.send_keys("pradeep30@gmail.com")
+
+            faculty_pw = self.driver.find_element_by_id("password")
+            faculty_pw.send_keys("Pradeep123")
+
+            faculty_repw = self.driver.find_element_by_id("password2")
+            faculty_repw.send_keys("Pradeep123")
 
             submit_button = self.driver.find_element_by_id("submit")
             submit_button.click()
@@ -177,20 +215,21 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
 
             self.logout()
 
-    def test_Regfaculty_fail2(self):
+
+
+    def test_Regfaculty_fail3(self):                                                    #done
             self.driver.get("http://localhost:5000/auth/logout")
             self.driver.implicitly_wait(10)
-            self.login("ram", "ram")
+            self.login("ram", "ram1")
             self.driver.implicitly_wait(10)
 
-            a = self.driver.find_element_by_link_text('Register Faculty')
-            self.driver.implicitly_wait(10)
+            a = self.driver.find_element_by_id('Register Faculty')
             a.click()
-
+            self.driver.get('http://localhost:5000/auth/registerFaculty')
             self.driver.implicitly_wait(10)
 
             faculty_id = self.driver.find_element_by_id("fac_id")
-            faculty_id.send_keys("FC678")
+            faculty_id.send_keys("FC784")
 
             faculty_user = self.driver.find_element_by_id("username")
             faculty_user.send_keys("P")
@@ -208,25 +247,25 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
             submit_button.click()
 
             self.driver.implicitly_wait(10)
-            text = self.driver.find_element_by_class_name("alert").text
-            self.assertEqual(text, "Username should be 5 to 16 characters long")
+            text = self.driver.find_element_by_class_name("help-block").text
+            self.assertEqual(text, "Username should be between 5 to 16 characters long")
 
             self.logout()
 
-    def test_Regfaculty_fail3(self):
+
+    def test_Regfaculty_fail4(self):                                                    #done
             self.driver.get("http://localhost:5000/auth/logout")
             self.driver.implicitly_wait(10)
-            self.login("ram", "ram")
+            self.login("ram", "ram1")
             self.driver.implicitly_wait(10)
 
-            a = self.driver.find_element_by_link_text('Register Faculty')
-            self.driver.implicitly_wait(10)
+            a = self.driver.find_element_by_id('Register Faculty')
             a.click()
-
+            self.driver.get('http://localhost:5000/auth/registerFaculty')
             self.driver.implicitly_wait(10)
 
             faculty_id = self.driver.find_element_by_id("fac_id")
-            faculty_id.send_keys("FC678")
+            faculty_id.send_keys("FC784")
 
             faculty_user = self.driver.find_element_by_id("username")
             faculty_user.send_keys("Pradeep")
@@ -238,78 +277,117 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
             faculty_pw.send_keys("Pradeep123")
 
             faculty_repw = self.driver.find_element_by_id("password2")
-            faculty_repw.send_keys("Parvathi123")
+            faculty_repw.send_keys("Pardeep123")
 
             submit_button = self.driver.find_element_by_id("submit")
             submit_button.click()
 
             self.driver.implicitly_wait(10)
-            text = self.driver.find_element_by_class_name("alert").text
-            self.assertEqual(text, "Field must be equal password")
+            text = self.driver.find_element_by_class_name("help-block").text
+            self.assertEqual(text, "Field must be equal to password.")
 
             self.logout()
 
-            
-    # def test_Regstudent_success(self):
-    #     self.driver.get("http://localhost:5000/auth/logout")
-    #     self.driver.implicitly_wait(10)
-    #     self.login("ram", "ram")
-    #     self.driver.implicitly_wait(10)
 
-    #     a = self.driver.find_element_by_link_text('Register Student')
-    #     a.click()
+    def test_Regfaculty_success(self):                                               #done
+        self.driver.get("http://localhost:5000/auth/logout")
+        self.driver.implicitly_wait(10)
+        self.login("ram","ram1")
+        self.driver.implicitly_wait(10)
 
-    #     self.driver.implicitly_wait(10)
+        a = self.driver.find_element_by_id('Register Faculty')
+        a.click()
+        self.driver.get('http://localhost:5000/auth/registerFaculty')
+        self.driver.implicitly_wait(10)
 
-    #     student_roll = self.driver.find_element_by_id("roll_number")
-    #     student_roll.send_keys("CB.EN.U4CSE17342")
+        faculty_id = self.driver.find_element_by_id("fac_id")
+        faculty_id.send_keys("FC784")
 
-    #     student_user = self.driver.find_element_by_id("username")
-    #     student_user.send_keys("parvathi")
+        faculty_user = self.driver.find_element_by_id("username")
+        faculty_user.send_keys("Pradeep")
 
-    #     student_email = self.driver.find_element_by_id("email")
-    #     student_email.send_keys("parvathi@gmail.com")
+        faculty_email = self.driver.find_element_by_id("email")
+        faculty_email.send_keys("pradeep30@gmail.com")
 
-    #     student_pw = self.driver.find_element_by_id("password")
-    #     student_pw.send_keys("Parvathi123")
+        faculty_pw = self.driver.find_element_by_id("password")
+        faculty_pw.send_keys("Pradeep123")
 
-    #     student_repw = self.driver.find_element_by_id("password2")
-    #     student_repw.send_keys("Parvathi123")
+        faculty_repw = self.driver.find_element_by_id("password2")
+        faculty_repw.send_keys("Pradeep123")
 
-    #     submit_button = self.driver.find_element_by_id("submit")
-    #     submit_button.click()
+        submit_button = self.driver.find_element_by_id("submit")
+        submit_button.click()
 
-    #     self.driver.implicitly_wait(10)
-    #     text = self.driver.find_element_by_class_name("alert").text
-    #     self.assertEqual(text, "Student Registered")
+        self.driver.implicitly_wait(10)
+        text = self.driver.find_element_by_class_name("alert").text
+        self.assertEqual(text, "New Faculty User successfully registered!")
 
-    #     self.logout()
+        self.logout()
 
-    def test_Regstudent_fail(self):
+
+
+    def test_Admin_student_success(self):                                              #done
+        self.driver.get("http://localhost:5000/auth/logout")
+        self.driver.implicitly_wait(10)
+        self.login("admin", "admin")
+        self.driver.implicitly_wait(10)
+
+        a = self.driver.find_element_by_id('Add Student')
+        a.click()
+        self.driver.get('http://localhost:5000/auth/addStudentDetails')
+        self.driver.implicitly_wait(10)
+
+        addstu_roll = self.driver.find_element_by_id("roll_no")
+        addstu_roll.send_keys("CSE17001")
+
+        addstu_name = self.driver.find_element_by_id("name")
+        addstu_name.send_keys("Shreya")
+
+
+        addstu_depart = self.driver.find_element_by_id("department")
+        addstu_depart.send_keys("CSE")
+
+        addstu_sec = self.driver.find_element_by_id("section")
+        addstu_sec.send_keys("A")
+
+        addstu_bat = self.driver.find_element_by_id("batch")
+        addstu_bat.send_keys("2020")
+
+
+        submit_button = self.driver.find_element_by_id("submit")
+        submit_button.click()
+
+        self.driver.implicitly_wait(10)
+        text = self.driver.find_element_by_class_name("alert").text
+        self.assertEqual(text, "Student Details Added")
+
+        self.logout()
+
+    def test_Regstudent_fail1(self):                                                  #done
             self.driver.get("http://localhost:5000/auth/logout")
             self.driver.implicitly_wait(10)
-            self.login("ram", "ram")
+            self.login("ram", "ram1")
             self.driver.implicitly_wait(10)
 
-            a = self.driver.find_element_by_link_text('Register Student')
-            self.driver.implicitly_wait(10)
+            a = self.driver.find_element_by_id('Register Student')
             a.click()
-
+            self.driver.get('http://localhost:5000/auth/registerStudent')
             self.driver.implicitly_wait(10)
+
             student_roll = self.driver.find_element_by_id("roll_number")
-            student_roll.send_keys("17342")
+            student_roll.send_keys("CSE17342")
 
             student_user = self.driver.find_element_by_id("username")
-            student_user.send_keys("Dummy")
+            student_user.send_keys("Shreya")
 
             student_email = self.driver.find_element_by_id("email")
-            student_email.send_keys("dummy@gmail.com")
+            student_email.send_keys("shreya@gmail.com")
 
             student_pw = self.driver.find_element_by_id("password")
-            student_pw.send_keys("dmmy123")
+            student_pw.send_keys("Shreya123")
 
             student_repw = self.driver.find_element_by_id("password2")
-            student_repw.send_keys("dmmy123")
+            student_repw.send_keys("Shreya123")
 
             submit_button = self.driver.find_element_by_id("submit")
             submit_button.click()
@@ -320,88 +398,186 @@ class ChairpersonFunctionalitiesCase(unittest.TestCase):
 
             self.logout()
 
-    def test_Admin_faculty_success(self):  #doubtful
+
+    def test_Regstudent_fail2(self):                                              #done
+            self.driver.get("http://localhost:5000/auth/logout")
+            self.driver.implicitly_wait(10)
+            self.login("ram", "ram1")
+            self.driver.implicitly_wait(10)
+
+            a = self.driver.find_element_by_id('Register Student')
+            a.click()
+            self.driver.get('http://localhost:5000/auth/registerStudent')
+            self.driver.implicitly_wait(10)
+
+            student_roll = self.driver.find_element_by_id("roll_number")
+            student_roll.send_keys("CSE17999")
+
+            student_user = self.driver.find_element_by_id("username")
+            student_user.send_keys("Shreya")
+
+            student_email = self.driver.find_element_by_id("email")
+            student_email.send_keys("shreya@gmail.com")
+
+            student_pw = self.driver.find_element_by_id("password")
+            student_pw.send_keys("Shreya123")
+
+            student_repw = self.driver.find_element_by_id("password2")
+            student_repw.send_keys("Shreya123")
+
+            submit_button = self.driver.find_element_by_id("submit")
+            submit_button.click()
+
+            self.driver.implicitly_wait(10)
+            text = self.driver.find_element_by_class_name("help-block").text
+            self.assertEqual(text, "Roll Number not found in Database!")
+
+            self.logout()
+
+
+    def test_Regstudent_fail3(self):                                              #done
+            self.driver.get("http://localhost:5000/auth/logout")
+            self.driver.implicitly_wait(10)
+            self.login("ram", "ram1")
+            self.driver.implicitly_wait(10)
+
+            a = self.driver.find_element_by_id('Register Student')
+            a.click()
+            self.driver.get('http://localhost:5000/auth/registerStudent')
+            self.driver.implicitly_wait(10)
+
+            student_roll = self.driver.find_element_by_id("roll_number")
+            student_roll.send_keys("CSE17001")
+
+            student_user = self.driver.find_element_by_id("username")
+            student_user.send_keys("S")
+
+            student_email = self.driver.find_element_by_id("email")
+            student_email.send_keys("shreya@gmail.com")
+
+            student_pw = self.driver.find_element_by_id("password")
+            student_pw.send_keys("Shreya123")
+
+            student_repw = self.driver.find_element_by_id("password2")
+            student_repw.send_keys("Shreya123")
+
+            submit_button = self.driver.find_element_by_id("submit")
+            submit_button.click()
+
+            self.driver.implicitly_wait(10)
+            text = self.driver.find_element_by_class_name("help-block").text
+            self.assertEqual(text, "Username should be between 5 to 16 characters long")
+
+            self.logout()
+
+    def test_Regstudent_fail4(self):                                              #done
+            self.driver.get("http://localhost:5000/auth/logout")
+            self.driver.implicitly_wait(10)
+            self.login("ram", "ram1")
+            self.driver.implicitly_wait(10)
+
+            a = self.driver.find_element_by_id('Register Student')
+            a.click()
+            self.driver.get('http://localhost:5000/auth/registerStudent')
+            self.driver.implicitly_wait(10)
+
+            student_roll = self.driver.find_element_by_id("roll_number")
+            student_roll.send_keys("CSE17001")
+
+            student_user = self.driver.find_element_by_id("username")
+            student_user.send_keys("Shreya")
+
+            student_email = self.driver.find_element_by_id("email")
+            student_email.send_keys("shreya@gmail.com")
+
+            student_pw = self.driver.find_element_by_id("password")
+            student_pw.send_keys("Shreya123")
+
+            student_repw = self.driver.find_element_by_id("password2")
+            student_repw.send_keys("Shyrea123")
+
+            submit_button = self.driver.find_element_by_id("submit")
+            submit_button.click()
+
+            self.driver.implicitly_wait(10)
+            text = self.driver.find_element_by_class_name("help-block").text
+            self.assertEqual(text, "Field must be equal to password.")
+
+            self.logout()
+
+
+    def test_Regstudent_success(self):                                                #done
         self.driver.get("http://localhost:5000/auth/logout")
         self.driver.implicitly_wait(10)
-        self.login("admin", "admin")
+        self.login("ram", "ram1")
         self.driver.implicitly_wait(10)
 
-        a = self.driver.find_element_by_link_text('Add Faculty Details')
-        self.driver.implicitly_wait(10)
+        a = self.driver.find_element_by_id('Register Student')
         a.click()
-
+        self.driver.get('http://localhost:5000/auth/registerStudent')
         self.driver.implicitly_wait(10)
 
-        addfac_id = self.driver.find_element_by_id("fac_id")
-        addfac_id.send_keys("FC784")
+        student_roll = self.driver.find_element_by_id("roll_number")
+        student_roll.send_keys("CSE17001")
 
-        addfac_name = self.driver.find_element_by_id("name")
-        addfac_name.send_keys("Parthiv")
+        student_user = self.driver.find_element_by_id("username")
+        student_user.send_keys("Shreya")
 
-        addfac_desig = self.driver.find_element_by_id("designation")
-        addfac_desig.send_keys("Faculty")
+        student_email = self.driver.find_element_by_id("email")
+        student_email.send_keys("shreya@gmail.com")
 
-        addfac_depart = self.driver.find_element_by_id("department")
-        addfac_depart.send_keys("CSE")
+        student_pw = self.driver.find_element_by_id("password")
+        student_pw.send_keys("Shreya123")
+
+        student_repw = self.driver.find_element_by_id("password2")
+        student_repw.send_keys("Shreya123")
 
         submit_button = self.driver.find_element_by_id("submit")
         submit_button.click()
 
-
         self.driver.implicitly_wait(10)
         text = self.driver.find_element_by_class_name("alert").text
-        self.assertEqual(text, "Faculty Details Added")
+        self.assertEqual(text, "New Student User successfully registered!")
 
         self.logout()
 
-    def test_Admin_faculty_fail1(self):  #doubtful
+    def test_Student_Choose(self):
         self.driver.get("http://localhost:5000/auth/logout")
         self.driver.implicitly_wait(10)
-        self.login("admin", "admin")
+        self.login("Shreya", "Shreya123")
         self.driver.implicitly_wait(10)
 
-        a = self.driver.find_element_by_link_text('Add Faculty Details')
-        self.driver.implicitly_wait(10)
+        a = self.driver.find_element_by_id('Choose Elective Preference')
         a.click()
+        self.driver.get('http://localhost:5000/ChooseElectiveToStudy')
+        self.driver.implicitly_wait(10)
+
+
+        l1 = self.driver.find_element_by_id('Pref1 CSE312')
+        l1.click()
+        self.driver.implicitly_wait(10)
+        r1=self.driver.find_element_by_id('Reset First')
+        r1.click()
+        self.driver.get("http://localhost:5000/funcChooseElectiveToStudy/None/1")
 
         self.driver.implicitly_wait(10)
 
-        addfac_id = self.driver.find_element_by_id("fac_id")
-        addfac_id.send_keys("1234")
-
-        addfac_name = self.driver.find_element_by_id("name")
-        addfac_name.send_keys("Abinav")
-
-        addfac_desig = self.driver.find_element_by_id("designation")
-        addfac_desig.send_keys("Faculty")
-
-        addfac_depart = self.driver.find_element_by_id("department")
-        addfac_depart.send_keys("ECE")
-
-        submit_button = self.driver.find_element_by_id("submit")
-        submit_button.click()
-
+        l2 = self.driver.find_element_by_id('Pref2 CSE312')
+        l2.click()
         self.driver.implicitly_wait(10)
-        text = self.driver.find_element_by_class_name("help-block").text
-        self.assertEqual(text, "Faculty ID is in unexpected form. Should be like FCXXX")
-
-        self.logout()
-
-    def test_Student_p1(self):
-        self.driver.get("http://localhost:5000/auth/logout")
-        self.driver.implicitly_wait(10)
-        self.login("rohitsai", "Rohitsai123")
-        self.driver.implicitly_wait(10)
+        r2 = self.driver.find_element_by_id('Reset Second')
+        r2.click()
+        self.driver.get("http://localhost:5000/funcChooseElectiveToStudy/None/2")
 
         self.driver.implicitly_wait(10)
 
-        a = self.driver.find_element_by_link_text('Enter Elective Preference')
+        l3 = self.driver.find_element_by_id('Pref3 CSE312')
+        l3.click()
         self.driver.implicitly_wait(10)
-        a.click()
+        r3 = self.driver.find_element_by_id('Reset Third')
+        r3.click()
+        self.driver.get("http://localhost:5000/funcChooseElectiveToStudy/None/1")
 
-        self.driver.implicitly_wait(10)
-        text = self.driver.find_element_by_class_name("alert").text
-        self.assertEqual(text, "Access denied")
 
         self.logout()
 

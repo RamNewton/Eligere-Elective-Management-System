@@ -1,6 +1,6 @@
     <div class="row">
     <div class="col-md-4">
-        <div><h2> Hello, {{current_user.username}}! </h2></div>
+        <div><h2 id="greeting"> Hello, {{current_user.username}}! </h2></div>
         <h4> Roll Number : {{data.roll_number }} </h4>
     </div>
     <div class="col-md-4">
@@ -24,8 +24,8 @@
 <div class="row">
     <div class="col-md-4">
         <div class="list-group">
-            <h3><a href = "{{ url_for('main.chooseElectiveToStudy') }}" class = "list-group-item"> Choose Elective Preference </a></h3>
-            <h3><a href = "{{ url_for('main.viewCourseOfferingFaculty') }}" class = "list-group-item"> View Course Offering Faculty </a></h3>
+            <h3 id="Choose Elective Preference"><a href = "{{ url_for('main.chooseElectiveToStudy') }}" class = "list-group-item"> Choose Elective Preference </a></h3>
+            <h3 id="View Course Offering Faculty"><a href = "{{ url_for('main.viewCourseOfferingFaculty') }}" class = "list-group-item"> View Course Offering Faculty </a></h3>
         </div>
     </div>
 </div>

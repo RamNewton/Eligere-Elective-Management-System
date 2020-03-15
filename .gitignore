@@ -1,3 +1,6 @@
 __pycache__/
 venv/
 chromedriver.exe
+example_suite/
+ui_reports/
+unit_reports/

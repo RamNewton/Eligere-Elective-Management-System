@@ -13,21 +13,21 @@
                 <div class="col-md-1">
                     <br>
                     {% if choice['1'] == 'None' %}
-                        <a href = "{{url_for('main.funcChooseElectiveToStudy', elective_id = elective.electiveID, pref = 1)}}" ><button type="button" class="btn btn-success btn-md"> Pref 1 </button></a>
+                        <a href = "{{url_for('main.funcChooseElectiveToStudy', elective_id = elective.electiveID, pref = 1)}}" ><button type="button" class="btn btn-success btn-md" id='{{"Pref1 " + elective.electiveID}}'> Pref 1 </button></a>
                     {% endif %}
                 </div>
 
                 <div class="col-md-1">
                     <br>
                     {% if choice['2'] == 'None' %}
-                        <a href = "{{url_for('main.funcChooseElectiveToStudy', elective_id = elective.electiveID, pref = 2)}}" ><button type="button" class="btn btn-success btn-md"> Pref 2 </button></a>
+                        <a href = "{{url_for('main.funcChooseElectiveToStudy', elective_id = elective.electiveID, pref = 2)}}" ><button type="button" class="btn btn-success btn-md"  id='{{"Pref2 " + elective.electiveID}}'> Pref 2 </button></a>
                     {% endif %}
                 </div>
 
                 <div class="col-md-1">
                     <br>
                     {% if choice['3'] == 'None' %}
-                        <a href = "{{url_for('main.funcChooseElectiveToStudy', elective_id = elective.electiveID, pref = 3)}}" ><button type="button" class="btn btn-success btn-md"> Pref 3 </button></a>
+                        <a href = "{{url_for('main.funcChooseElectiveToStudy', elective_id = elective.electiveID, pref = 3)}}" ><button type="button" class="btn btn-success btn-md"  id='{{"Pref3 " + elective.electiveID}}'> Pref 3 </button></a>
                     {% endif %}
                 </div>
         </div>

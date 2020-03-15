@@ -2,6 +2,7 @@ import unittest
 from app import create_app, db
 from app.models import *
 from config import Config
+import HtmlTestRunner
 
 class TestConfig(Config):
     TESTING = True
@@ -185,4 +186,5 @@ class ElectiveListv2Case(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    # unittest.main(verbosity=2)
+    unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output = "unit_reports", combine_reports = True))

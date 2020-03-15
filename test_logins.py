@@ -29,25 +29,25 @@ class LoginCase(unittest.TestCase):
         link.click()
 
     def test_chairperson_login(self):
-        self.login("ram", "ram")
+        self.login("ram", "ram1")
         text = self.driver.find_element_by_id("greeting").text
-        self.assertEqual(text, "Hi, ram!")
+        self.assertEqual(text, "Hello, ram!")
         self.logout()
 
     def test_faculty_login(self):
         self.driver.get("http://localhost:5000/auth/logout")
         self.driver.implicitly_wait(10)
-        self.login("vignesh", "Vignesh123")
+        self.login("venkat", "Venkat123")
         text = self.driver.find_element_by_id("greeting").text
-        self.assertEqual(text, "Hi, vignesh!")
+        self.assertEqual(text, "Hello, venkat!")
         self.driver.implicitly_wait(10)
         self.logout()
 
     def test_student_login(self):
-        self.login("rohitsai", "Rohitsai123")
+        self.login("sanjay", "Sanjay123")
         self.driver.implicitly_wait(10)
         text = self.driver.find_element_by_id("greeting").text
-        self.assertEqual(text, "Hi, rohitsai!")
+        self.assertEqual(text, "Hello, sanjay!")
         self.driver.implicitly_wait(10)
         self.logout()
 

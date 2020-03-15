@@ -8,7 +8,7 @@
                 <p><a class="btn" data-toggle="collapse" data-target="#{{'viewdetails' + elective.electiveID}}">View Course details &raquo;</a></p>
             </div>
             <div class="col-md-4">
-                <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = 'None')}}" ><button type="button" class="btn btn-danger btn-md"> Remove </button></a>
+                <a href = "{{url_for('main.funcChooseElectiveToOffer', elective_id = 'None')}}" ><button type="button" class="btn btn-danger btn-md" id='{{"Remove " + elective.electiveID}}'> Remove </button></a>
             </div>
     </div>
 </div>
